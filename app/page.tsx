@@ -30,7 +30,7 @@ export default async function Home() {
             {data.count} transaction{data.count === 1 ? "" : "s"} need attention
           </p>
 
-          <div className="mt-4 space-y-4">
+          <div className="mt-8 flex flex-col gap-4">
             {data.transactions.map((transaction) => (
              <TransactionCard 
              key={transaction.id}
@@ -40,8 +40,8 @@ export default async function Home() {
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             <SummaryCard label='Needs attention' value={data.count}/>
-            <SummaryCard label='high severity' value={highSeverityCount}/>
-            <SummaryCard label='pending too long' value={stuckPendingCount}/>
+            <SummaryCard label='High severity' value={highSeverityCount}/>
+            <SummaryCard label='Pending too long' value={stuckPendingCount}/>
           </div>
         </div>
       </div>

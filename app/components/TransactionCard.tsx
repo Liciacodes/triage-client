@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Transaction } from "../types/transaction";
+import { formatIssueLabel } from "../utils/formatters";
 
 type TransactionCardProps = {
     transaction: Transaction;
@@ -29,7 +30,7 @@ return (
 
       <div className="mt-4">
         <p className="font-medium text-zinc-900">
-          {issue?.issue}
+          {issue && formatIssueLabel(issue.issue)}
         </p>
 
         <p className="mt-1 text-sm text-zinc-600">
