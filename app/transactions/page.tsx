@@ -1,12 +1,13 @@
 import { Transaction } from "@/app/types/transaction";
 import TransactionsTable from "../components/TransactionsTable";
+import { API_URL } from "../utils/api";
 
 type TransactionsResponse = {
   transactions: Transaction[];
 };
 
 export default async function TransactionsPage() {
-  const response = await fetch("http://localhost:3000/api/transactions", {
+  const response = await fetch(`${API_URL}/api/transactions`, {
     cache: "no-store",
   });
   if (!response.ok) {

@@ -10,6 +10,7 @@ import {
   formatCurrency,
   formatIssueLabel,
 } from "@/app/utils/formatters";
+import { API_URL } from "@/app/utils/api";
 
 type Props = {
   params: Promise<{
@@ -42,7 +43,7 @@ export default async function TransactionPage({
   const { reference } = await params;
 
   const response = await fetch(
-    `http://localhost:3000/api/transactions/${reference}`,
+    `${API_URL}/api/transactions/${reference}`,
     {
       cache: "no-store",
     },

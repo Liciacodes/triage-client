@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { API_URL } from "../utils/api";
 
 type AcknowledgeAlertButtonProps = {
   alertId: string;
@@ -18,7 +19,7 @@ export default function AcknowledgeAlertButton({
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/alerts/${alertId}/acknowledge`,
+        `${API_URL}/api/alerts/${alertId}/acknowledge`,
         {
           method: "PATCH",
         },

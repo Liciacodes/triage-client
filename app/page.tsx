@@ -1,10 +1,11 @@
 import SummaryCard from "./components/SummaryCard";
 import TransactionCard from "./components/TransactionCard";
 import type { AttentionResponse } from "./types/transaction";
+import { API_URL } from "./utils/api";
 
 export default async function Home() {
   const response = await fetch(
-    "http://localhost:3000/api/transactions/attention",
+    `${API_URL}/api/transactions/attention`,
     {
       cache: "no-store",
     },
