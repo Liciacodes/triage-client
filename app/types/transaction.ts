@@ -6,13 +6,15 @@ export interface Issue {
     reason: string;
 }
 
+export type TransactionStatus = 'pending' | "success" | "failed" | "reversed";
+
 export interface Transaction {
     id: string;
     reference: string;
     amount: number;
     currency: string;
     customerEmail: string;
-    status: 'pending' | "success" | "failed" | "reversed" ;
+    status: TransactionStatus;
     expectedSettlement: number | null;
     actualSettlement: number | null;
     createdAt: string;

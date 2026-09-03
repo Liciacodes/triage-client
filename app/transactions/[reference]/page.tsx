@@ -1,5 +1,7 @@
 import ResolveAlertButton from "@/app/components/ResolveAlertButton";
-import { Issue, Transaction } from "@/app/types/transaction";
+import { SeverityBadge } from "@/app/components/SeverityBadge";
+import { StatusBadge } from "@/app/components/StatusBadge";
+import { Issue ,IssueSeverity, Transaction } from "@/app/types/transaction";
 import { formatCurrency, formatIssueLabel } from "@/app/utils/formatters";
 
 type Props = {
@@ -11,7 +13,7 @@ type Props = {
 type Alert = {
   id: string;
   type: string;
-  severity: string;
+  severity: IssueSeverity;
   reason: string;
   resolved: boolean;
   resolvedAt: string | null;
@@ -47,6 +49,7 @@ export default async function TransactionPage({ params }: Props) {
   const issue = data.issues[0];
 
   const unresolvedAlert = data.alerts.find((alert) => !alert.resolved)
+  const resolvedAlerts = data.alerts.filter((alert) => alert.resolved)
 
   return (
     <main className="min-h-screen bg-zinc-50 p-8">
@@ -69,7 +72,9 @@ export default async function TransactionPage({ params }: Props) {
 
           <div className="rounded-xl border bg-white p-5">
             <p className="text-sm text-zinc-500">Status</p>
-            <p className="mt-2 font-medium">{transaction.status}</p>
+            <div className="mt-2">
+              <StatusBadge status={transaction.status} />
+            </div>
           </div>
 
           <div className="rounded-xl border bg-white p-5">
@@ -92,9 +97,7 @@ export default async function TransactionPage({ params }: Props) {
             <div className="flex items-center justify-between">
               <h2 className="font-semibold text-zinc-900">Needs attention</h2>
 
-              <span className="rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700">
-                {issue.severity}
-              </span>
+              <SeverityBadge severity={issue.severity} />
             </div>
 
             <p className="mt-4 font-medium text-zinc-900">{formatIssueLabel(issue.issue)}</p>
@@ -107,6 +110,44 @@ export default async function TransactionPage({ params }: Props) {
             )}
           </div>
         )}
+
+        {resolvedAlerts.length > 0 && (
+  <div className="mt-8 rounded-xl border border-zinc-200 bg-white p-5">
+    <h2 className="font-semibold text-zinc-900">
+      Resolved alerts
+    </h2>
+
+    <div className="mt-4 space-y-4">
+      {resolvedAlerts.map((alert) => (
+        <div
+          key={alert.id}
+          className="rounded-lg border border-zinc-200 bg-zinc-50 p-4"
+        >
+          <div className="flex items-center justify-between">
+            <p className="font-medium text-zinc-900">
+              {formatIssueLabel(alert.type)}
+            </p>
+
+            <span className="text-sm font-medium text-green-700">
+              Resolved
+            </span>
+          </div>
+
+          <p className="mt-2 text-sm text-zinc-600">
+            {alert.reason}
+          </p>
+
+          {alert.resolvedAt && (
+            <p className="mt-2 text-xs text-zinc-500">
+              Resolved{" "}
+              {new Date(alert.resolvedAt).toLocaleString()}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
       </div>
     </main>
   );

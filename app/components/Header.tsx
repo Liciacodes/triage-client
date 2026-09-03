@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Header() {
   return (
    <header className="border-b border-zinc-200 bg-white">
-  <div className="mx-auto flex max-w-5xl items-center justify-between px-0 py-6">
+  <div className="mx-auto flex max-w-5xl items-center justify-between px-3 py-6">
     <Link href="/" className="text-xl font-semibold">
       Triage
     </Link>

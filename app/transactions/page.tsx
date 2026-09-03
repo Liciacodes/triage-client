@@ -1,6 +1,4 @@
 import { Transaction } from "@/app/types/transaction";
-import Link from "next/link";
-import { formatCurrency } from "../utils/formatters";
 import TransactionsTable from "../components/TransactionsTable";
 
 type TransactionsResponse = {
@@ -12,12 +10,22 @@ export default async function TransactionsPage() {
     cache: "no-store",
   });
   if (!response.ok) {
-    return (
-      <main className="p-8">
-        <p>Failed to fetch transactions</p>
-      </main>
-    );
-  }
+  return (
+    <main className="min-h-screen bg-zinc-50 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-6">
+          <p className="font-medium text-red-900">
+            Unable to load transactions
+          </p>
+
+          <p className="mt-1 text-sm text-red-700">
+            Something went wrong while loading your transactions.
+          </p>
+        </div>
+      </div>
+    </main>
+  );
+}
 
   const data: TransactionsResponse = await response.json();
 

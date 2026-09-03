@@ -12,6 +12,7 @@ export default function ResolveAlertButton({
 }: ResolveAlertButtonProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleResolve = async () => {
     setLoading(true);
@@ -30,16 +31,21 @@ export default function ResolveAlertButton({
       return;
     }
 
-    router.refresh();
+    setSuccess(true);
+
+    setTimeout(() => {
+        router.refresh();
+    }, 800);
+  
   };
 
   return (
     <button
       onClick={handleResolve}
-      disabled={loading}
+    disabled={loading || success}
       className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
     >
-      {loading ? "Resolving..." : "Mark as resolved"}
+      {loading ? "Resolving..." : success ? "Resolved ✓" : "Mark as resolved"}
     </button>
 
   )
