@@ -30,6 +30,12 @@ export default async function Home() {
 
   const data: AttentionResponse = await response.json();
 
+  // Show the most recently updated transaction first.
+  const sortedTransactions = [...data.transactions].sort(
+    (a, b) =>
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+  );
+
   const highSeverityCount = data.transactions.filter((transaction) =>
     transaction.issues.some((issue) => issue.severity === "high"),
   ).length;
@@ -42,7 +48,7 @@ export default async function Home() {
     <main className="min-h-screen bg-zinc-50 p-8">
       <div className="mx-auto max-w-5xl">
         <div className="mt-8">
-          <DemoControls/>
+          <DemoControls />
         </div>
 
         <div className="mt-8">
@@ -51,8 +57,9 @@ export default async function Home() {
               ? "1 transaction needs attention"
               : `${data.count} transactions need attention`}
           </p>
+
           <div className="mt-8">
-            {data.transactions.length === 0 ? (
+            {sortedTransactions.length === 0 ? (
               <div className="rounded-xl border border-zinc-200 bg-white px-6 py-12 text-center">
                 <p className="font-medium text-zinc-900">All clear</p>
 
@@ -62,7 +69,7 @@ export default async function Home() {
               </div>
             ) : (
               <div className="flex flex-col gap-4">
-                {data.transactions.map((transaction) => (
+                {sortedTransactions.map((transaction) => (
                   <TransactionCard
                     key={transaction.id}
                     transaction={transaction}
@@ -74,8 +81,14 @@ export default async function Home() {
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             <SummaryCard label="Needs attention" value={data.count} />
-            <SummaryCard label="High severity" value={highSeverityCount} />
-            <SummaryCard label="Pending too long" value={stuckPendingCount} />
+            <SummaryCard
+              label="High severity"
+              value={highSeverityCount}
+            />
+            <SummaryCard
+              label="Pending too long"
+              value={stuckPendingCount}
+            />
           </div>
         </div>
       </div>
