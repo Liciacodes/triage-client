@@ -1,6 +1,7 @@
 import AcknowledgeAlertButton from "@/app/components/AcknowledgeAlertButton";
 import { SeverityBadge } from "@/app/components/SeverityBadge";
 import { StatusBadge } from "@/app/components/StatusBadge";
+import DemoResolutionButton from "@/app/components/DemoResolutionButton";
 import {
   Issue,
   IssueSeverity,
@@ -220,6 +221,9 @@ export default async function TransactionPage({
             </div>
           </div>
         )}
+        {acknowledgedAlerts.length > 0 && (
+  <DemoResolutionButton reference={transaction.reference} />
+)}
 
         {resolvedAlerts.length > 0 && (
           <div className="mt-8 rounded-xl border border-zinc-200 bg-white p-5">
