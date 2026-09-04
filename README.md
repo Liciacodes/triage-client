@@ -8,6 +8,20 @@ Instead of treating every transaction equally, Triage evaluates transaction data
 
 [Triage Live Application](https://triage-client.vercel.app)
 
+## Screenshots
+
+### 1. Exception-first dashboard
+![Dashboard](public/screenshots/dashboard.png)
+
+### 2. Open alert
+![Open alert](public/screenshots/open-alert.png)
+
+### 3. Alert acknowledgement
+![Acknowledged alert](public/screenshots/acknowledged-alert.png)
+
+### 4. Automatic resolution
+![Resolved alert](public/screenshots/resolved-alert.png)
+
 ## Why Triage?
 
 Payment operations teams can process large numbers of transactions while only a small percentage require manual investigation.
