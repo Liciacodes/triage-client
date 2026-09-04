@@ -1,95 +1,259 @@
-# Triage Client
+# Triage
 
-Frontend dashboard for Triage, a transaction monitoring and issue resolution tool for payment operations teams.
+An exception-first payment operations dashboard that helps operators focus on transactions that actually require attention.
 
-## Overview
+Instead of treating every transaction equally, Triage evaluates transaction data against operational rules, surfaces exceptions, explains why they were flagged, and tracks alerts from detection through acknowledgement and resolution.
 
-Triage helps surface transactions that require human attention.
+## Live Demo
 
-The frontend connects to the Triage API and provides an interface for reviewing transactions, investigating issues, and resolving alerts.
+[Triage Live Application](https://triage-client.vercel.app)
+
+## Why Triage?
+
+Payment operations teams can process large numbers of transactions while only a small percentage require manual investigation.
+
+Triage is built around a simple idea:
+
+> Surface the exceptions, explain the problem, and keep them visible until the underlying issue is actually resolved.
+
+The dashboard provides an attention queue rather than forcing an operator to manually inspect every transaction.
 
 ## Features
 
-* Attention queue for transactions with unresolved alerts
-* Transaction summary dashboard
-* View all transactions
-* Search transactions by reference or customer email
-* Filter transactions by status
-* Transaction detail and investigation view
-* View issue severity and reason
-* Mark alerts as resolved
-* Responsive transaction table
-* Multi-currency formatting
+### Attention Dashboard
+
+The main dashboard gives operators an immediate view of transactions requiring action.
+
+It includes:
+
+- Total transactions needing attention
+- High-severity issue count
+- Transactions stuck in pending
+- Searchable attention queue
+- Severity indicators
+- Transaction status
+- Clear empty state when no active issues remain
+
+### Transaction Management
+
+The transactions view provides:
+
+- Complete transaction history
+- Search by reference or customer
+- Status filtering
+- Transaction amount and currency
+- Transaction status
+- Issue indicators
+- Navigation to individual transaction details
+
+### Transaction Details
+
+Each transaction has a dedicated detail view showing:
+
+- Transaction reference
+- Customer
+- Amount
+- Current transaction status
+- Expected settlement
+- Actual settlement
+- Active issue reason
+- Issue severity
+- Alert state
+- Historical resolved alerts
+
+This allows an operator to understand both the current transaction state and the operational history around it.
+
+## Alert Lifecycle
+
+Triage distinguishes between reviewing an issue and actually fixing it.
+
+```text
+OPEN → ACKNOWLEDGED → RESOLVED
+```
+
+### OPEN
+
+The underlying issue is active and requires attention.
+
+### ACKNOWLEDGED
+
+An operator has reviewed the alert.
+
+Acknowledging an alert does **not** mean that the underlying transaction problem has disappeared.
+
+### RESOLVED
+
+The transaction changes and the condition that originally triggered the alert no longer applies.
+
+The backend automatically resolves the stale alert while preserving it as part of the transaction's history.
+
+This distinction prevents reviewed-but-unfixed problems from being incorrectly presented as resolved.
+
+## Exception Rules
+
+Triage currently detects:
+
+- Failed transactions
+- Reversed transactions
+- Transactions stuck in pending
+- Settlement mismatches
+
+Examples of rule explanations include:
+
+```text
+Transaction with reference TRG-FAILED-001 has failed.
+```
+
+and settlement discrepancies where the expected and actual settlement values differ.
+
+## Example Workflow
+
+```text
+Transaction received
+        ↓
+Rules evaluated
+        ↓
+Issue detected
+        ↓
+OPEN alert created
+        ↓
+Appears in attention queue
+        ↓
+Operator acknowledges alert
+        ↓
+ACKNOWLEDGED
+        ↓
+Transaction state changes
+        ↓
+Rule no longer matches
+        ↓
+RESOLVED
+        ↓
+Alert preserved in transaction history
+```
 
 ## Tech Stack
 
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
+### Frontend
 
-## Backend
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
 
-The frontend consumes the Triage API built with:
+### Backend
 
-* Node.js
-* Express
-* TypeScript
-* Prisma
-* PostgreSQL / Supabase
-* Zod
-* Vitest
-* Supertest
+- Node.js
+- Express
+- TypeScript
+- PostgreSQL
+- Prisma
+- Zod
 
-Backend repository: https://github.com/Liciacodes/triage-api
+### Testing
 
-## Getting Started
+- Vitest
+- Supertest
 
-Clone the repository:
+### Deployment
+
+- Vercel — frontend
+- Render — API
+- Supabase — PostgreSQL database
+
+## Frontend Structure
+
+```text
+app/
+├── components/
+│   ├── AcknowledgeAlertButton.tsx
+│   ├── Header.tsx
+│   ├── SeverityBadge.tsx
+│   ├── StatusBadge.tsx
+│   ├── SummaryCard.tsx
+│   ├── TransactionCard.tsx
+│   └── TransactionsTable.tsx
+│
+├── transactions/
+│   ├── [reference]/
+│   │   └── page.tsx
+│   └── page.tsx
+│
+├── types/
+│   └── transaction.ts
+│
+├── utils/
+│   ├── api.ts
+│   └── formatters.ts
+│
+├── globals.css
+├── layout.tsx
+└── page.tsx
+```
+
+## Architecture
+
+Triage separates the user interface from the transaction evaluation system.
+
+```text
+Next.js Dashboard
+        ↓
+Express API
+        ↓
+Transaction Service
+        ↓
+Rules Engine
+        ↓
+Alert Service
+        ↓
+PostgreSQL
+```
+
+The frontend consumes the API and focuses on presenting operational state clearly, while transaction evaluation and alert lifecycle decisions remain on the backend.
+
+## Running Locally
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Liciacodes/triage-client.git
 cd triage-client
 ```
 
-Install dependencies:
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-Start the development server:
+### 3. Configure the API URL
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000
+```
+
+### 4. Start the development server
 
 ```bash
-npm run dev -- -p 3001
+npm run dev
 ```
 
-The frontend will run at:
+Open the local Next.js application in your browser.
 
-```text
-http://localhost:3001
-```
+## Production
 
-The Triage API should be running separately at:
+The frontend is deployed on Vercel:
 
-```text
-http://localhost:3000
-```
+[Triage Live Application](https://triage-client.vercel.app)
 
-## Current Status
+The API is deployed separately on Render:
 
-Triage is currently under active development.
+[Triage API](https://triage-api-fg04.onrender.com)
 
-The current frontend supports the core transaction investigation flow:
+## Backend Repository
 
-```text
-Attention Queue
-      ↓
-Transaction Details
-      ↓
-Issue Investigation
-      ↓
-Resolve Alert
-```
+The rules engine, transaction processing, alert lifecycle, persistence, and API are maintained in the separate Triage API repository:
 
-More features will be added as the project evolves.
+[Triage API Repository](https://github.com/Liciacodes/triage-api)
