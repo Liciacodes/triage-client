@@ -42,15 +42,15 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-zinc-50 p-8">
       <div className="mx-auto max-w-5xl">
-        <p className="mt-2 text-zinc-600">
-          Transactions that need your attention
-        </p>
+       
 
         <div className="mt-8">
-          <p className="text-sm text-zinc-500">
-            {data.count} transaction{data.count === 1 ? "" : "s"} need attention
-          </p>
-
+          
+<p className="text-sm text-zinc-500">
+  {data.count === 1
+    ? "1 transaction needs attention"
+    : `${data.count} transactions need attention`}
+</p>
           <div className="mt-8">
             {data.transactions.length === 0 ? (
               <div className="rounded-xl border border-zinc-200 bg-white px-6 py-12 text-center">
